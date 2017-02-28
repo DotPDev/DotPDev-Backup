@@ -42,7 +42,6 @@ function backDemDataUp() {
             } else {
                 console.log(getCurrentTime() + ": Backup uploaded");
             }
-            process.exit();
         });
     });
 }
