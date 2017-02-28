@@ -18,14 +18,19 @@ if (process.env.NODE_ENV === 'dev') {
 } else {
     console.log('private key is');
     console.log(process.env.FB_PRIVATE_KEY);
+    var firebaseServiceAccount = require(process.env.FB_CREDENTIALS);
     admin.initializeApp({
-        credential: admin.credential.cert({
-            projectId: process.env.FB_PROJECT_ID,
-            clientEmail: process.env.FB_CLIENT_EMAIL,
-            privateKey: process.env.FB_PRIVATE_KEY
-          }),
-        databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
+      credential: admin.credential.cert(firebaseServiceAccount),
+      databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
     });
+    // admin.initializeApp({
+    //     credential: admin.credential.cert({
+    //         projectId: process.env.FB_PROJECT_ID,
+    //         clientEmail: process.env.FB_CLIENT_EMAIL,
+    //         privateKey: process.env.FB_PRIVATE_KEY
+    //       }),
+    //     databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
+    // });
 }
 var db = admin.database();
 var ref = db.ref('/');
