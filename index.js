@@ -9,20 +9,40 @@ function init() {
 }
 
 //Firebase setup
-var firebaseServiceAccount = require("./dotpSecKey.json");
-admin.initializeApp({
-  credential: admin.credential.cert(firebaseServiceAccount),
-  databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
-});
+if (process.env.NODE_ENV === 'dev') {
+    var firebaseServiceAccount = require("../dotpSecKey.json");
+    admin.initializeApp({
+      credential: admin.credential.cert(firebaseServiceAccount),
+      databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
+    });
+} else {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.FB_PROJECT_ID,
+            clientEmail: process.env.FB_CLIENT_EMAIL,
+            privateKey: process.env.FB_PRIVATE_KEY
+          }),
+        databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
+    });
+}
 var db = admin.database();
 var ref = db.ref('/');
 
 //AWS setup
-var s3BucketName = "dotp";
-var s3AccessKey = "AKIAJXAWPZ2NKOYGE23Q";
-var s3SecretKey = "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";
-var awsRegion = "us-west-2";
-var filenamePrefix = "firebase-";
+if (process.env.NODE_ENV === 'dev') {
+    var s3Creds = require("../s3CredFile.json");
+    var s3BucketName = s3Creds.s3BucketName;
+    var s3AccessKey = s3Creds.s3AccessKey;
+    var s3SecretKey = s3Creds.s3SecretKey;
+    var awsRegion = s3Creds.awsRegion;
+    var filenamePrefix = "firebase-";
+} else {
+    var s3BucketName = process.env.S3_BUCKET_NAME;
+    var s3AccessKey = process.env.S3_ACCESS_KEY;
+    var s3SecretKey = process.env.S3_SECRET_KEY;
+    var awsRegion = process.env.S3_AWS_REGION;
+    var filenamePrefix = "firebase-";
+}
 AWS.config.region = awsRegion;
 AWS.config.credentials = {accessKeyId: s3AccessKey, secretAccessKey: s3SecretKey};
 var s3 = new AWS.S3({params: {Bucket: s3BucketName}});

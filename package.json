@@ -6,7 +6,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start": "node index.js"
+    "start": "NODE_ENV=prod node index.js",
+    "dev": "NODE_ENV=dev node index.js"
   },
   "repository": {
     "type": "git",
