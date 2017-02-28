@@ -31,7 +31,6 @@ var s3 = new AWS.S3({params: {Bucket: s3BucketName}});
 var rule = new schedule.RecurrenceRule();
 rule.hour = 7;
 rule.dayOfWeek = new schedule.Range(0,6);
-
 var backupTask = schedule.scheduleJob(rule, function(){
     console.log('starting backup task for DotP');
     backDemDataUp();
