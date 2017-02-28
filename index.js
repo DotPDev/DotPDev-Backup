@@ -16,9 +16,9 @@ if (process.env.NODE_ENV === 'dev') {
       databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
     });
 } else {
-    console.log('private key is');
-    console.log(process.env.FB_PRIVATE_KEY);
-    var firebaseServiceAccount = require(process.env.FB_CREDENTIALS);
+    console.log('service account obj is');
+    var firebaseServiceAccount = JSON.parse(process.env.FB_CREDENTIALS);
+    console.log(firebaseServiceAccount);
     admin.initializeApp({
       credential: admin.credential.cert(firebaseServiceAccount),
       databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
