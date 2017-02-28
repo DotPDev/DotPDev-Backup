@@ -3,6 +3,11 @@ var admin = require("firebase-admin");
 var fs = require('fs');
 var schedule = require('node-schedule');
 
+function init() {
+    //Let's do a backup right now, just to ensure startup logic is working.
+    backDemDataUp();
+}
+
 //Firebase setup
 if (process.env.NODE_ENV === 'dev') {
     var firebaseServiceAccount = require("../dotpSecKey.json");
@@ -42,14 +47,14 @@ AWS.config.region = awsRegion;
 AWS.config.credentials = {accessKeyId: s3AccessKey, secretAccessKey: s3SecretKey};
 var s3 = new AWS.S3({params: {Bucket: s3BucketName}});
 
-//Node-Schedule for the scheduled backup job - this is every day at 12:00AM.
-var backupTask = schedule.scheduleJob('00 00 12 * * 1-7', function(){
+//Setup Schedule using Node-Schedule for every day at 7:00
+var rule = new schedule.RecurrenceRule();
+rule.hour = 7;
+rule.dayOfWeek = new schedule.Range(0,6);
+var backupTask = schedule.scheduleJob(rule, function(){
     console.log('starting backup task for DotP');
     backDemDataUp();
 });
-
-//Let's do one now, just to ensure startup is working.
-backDemDataUp();
 
 //This is the GET from firebase and the POST to AWS bucket
 function backDemDataUp() {
@@ -80,3 +85,5 @@ function getCurrentTime() {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     return yyyy + "-" + mm + "-" + dd + " " + time;
 }
+
+init();
