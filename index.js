@@ -16,6 +16,8 @@ if (process.env.NODE_ENV === 'dev') {
       databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
     });
 } else {
+    console.log('private key is');
+    console.log(process.env.FB_PRIVATE_KEY);
     admin.initializeApp({
         credential: admin.credential.cert({
             projectId: process.env.FB_PROJECT_ID,
