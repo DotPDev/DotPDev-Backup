@@ -5,9 +5,6 @@
   "main": "index.js",
   "author": "",
   "license": "ISC",
-  "scripts": {
-      "preinstall": "npm install"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DotPDev/DotPDev-Backup.git"
