@@ -4,19 +4,22 @@ var fs = require('fs');
 var schedule = require('node-schedule');
 
 //Firebase setup
-var firebaseServiceAccount = require("./dotpSecKey.json");
 admin.initializeApp({
-  credential: admin.credential.cert(firebaseServiceAccount),
-  databaseURL: "https://defenseofthepatience-b2b5f.firebaseio.com"
+  credential: admin.credential.cert({
+    projectId: process.env.FB_project_id,
+    clientEmail: process.env.FB_client_email,
+    privateKey: process.env.FB_private_key
+  }),
+  databaseURL: process.env.FB_database_url
 });
 var db = admin.database();
 var ref = db.ref('/');
 
 //AWS setup
-var s3BucketName = "dotp";
-var s3AccessKey = "AKIAJXAWPZ2NKOYGE23Q";
-var s3SecretKey = "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";
-var awsRegion = "us-west-2";
+var s3BucketName = process.env.S3_bucket_name;
+var s3AccessKey = process.env.S3_access_key;
+var s3SecretKey = process.env.S3_secret_key;
+var awsRegion = process.env.S3_aws_region;
 var filenamePrefix = "firebase-";
 AWS.config.region = awsRegion;
 AWS.config.credentials = {accessKeyId: s3AccessKey, secretAccessKey: s3SecretKey};
